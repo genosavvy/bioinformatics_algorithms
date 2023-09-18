@@ -55,20 +55,25 @@ def reverse_complement(file_path):
     except ValueError as e:
         raise ValueError(f'Error in DNA sequence: {e}') from e
 
-def nucleotide_loci(pattern, genome):
-    """
-    Find the starting positions of overlapping occurrences of a pattern in a genome.
+def nucleotide_loci(pattern, file_path):
 
-    Args:
-        pattern (str): The pattern to search for within the genome.
-        genome (str): The genome string in which to search for the pattern.
-
-    Returns:
-        list: A list of starting positions (indices) of pattern occurrences in the genome.
-    """
-    matches = re.finditer(fr'(?=({pattern}))', genome)
-    list_start = [match.start() for match in matches]
-    return list_start
+    try:
+        with open(file_path, "r") as f:
+            genome = f.readline().strip()
+        
+        # check the file is not empty
+        if not genome:
+            raise ValueError("The genome file is empty")
+        
+        matches = re.finditer(fr'(?=({pattern}))', genome)
+        list_start = [match.start() for match in matches]
+        return list_start
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f'File not found : {file_path}') from e
+    except IOError as e:
+        raise IOError(f' An error occured while reading the file: {e}') from e
+    except ValueError as e:
+        raise ValueError(f' Error in the dna_sequences: {e}') from e
 
 
 

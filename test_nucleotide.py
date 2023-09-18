@@ -7,8 +7,9 @@ def test_reverse():
 
 def test_nucleotide_loci(): 
     pattern = "ATAT"
-    geneome = "GATATATGCATATACTT"
-    assert nucleotide_loci(pattern, geneome) == [1,3,9]
+    file_path = "genome.txt"
+   
+    assert nucleotide_loci(pattern, file_path) == [1,3,9]
 
 
     
