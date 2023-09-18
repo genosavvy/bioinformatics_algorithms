@@ -1,23 +1,18 @@
 import logging
 import re
 
-# Configure the logger
-logging.basicConfig(filename='nucleotide.log', level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
+import logging
 
 def reverse_complement(file_path):
     """
-    Compute the reverse complement of a nucleotide sequence.
+    Generate the reverse complement of a DNA sequence read from a file.
 
     Args:
-        nucleotide (str): A string representing a DNA sequence consisting of 'A', 'T', 'G', and 'C'.
+        file_path (str): The path to the file containing the DNA sequence.
 
     Returns:
-        str: The reverse complement of the input nucleotide sequence.
+        str: The reverse complement of the DNA sequence.
     """
-
-    
     # Define a dictionary to map each nucleotide to its complement.
     nuc_dict = {
         "A": "T",
@@ -25,48 +20,76 @@ def reverse_complement(file_path):
         "G": "C",
         "C": "G"
     }
-    
-    # Initialize an empty list to store the complement of each nucleotide.
-    nuc_list = [] 
 
-    # Read file 
+    # Initialize an empty list to store the complement of each nucleotide.
+    nuc_list = []
 
     try:
-
         with open(file_path, "r") as f:
-            logger.error('File can not be opened')
-            file = f.readlines()
-    
+            # Read the DNA sequence from the file.
+            nucleotide = f.readline().strip()
 
-        nucleotide = file[0] 
-        # logger.debug(f'Generating the reverse complement of {nucleotide}')  
+            # Check if the DNA sequence is empty.
+            if not nucleotide:
+                raise ValueError("The DNA sequence is empty in the file.")
 
-        # Iterate through each nucleotide in the input sequence.
-        for i in nucleotide:
-            # Look up the complement in the dictionary and append it to the list.
-            logger.debug(f'computing the complements for {i}')
-            nuc = nuc_dict[i]
-            nuc_list.append(nuc)
+            # Iterate through each nucleotide in the input sequence.
+            for i in nucleotide:
+                # Look up the complement in the dictionary and append it to the list.
+                nuc = nuc_dict.get(i, i)  # Use get to handle unknown nucleotides
+                nuc_list.append(nuc)
 
-        # Reverse the list to get the reverse complement.
-        nuc_list.reverse()
+            # Reverse the list to get the reverse complement.
+            nuc_list.reverse()
 
-        # Join the reversed complement list into a single string.
-        update_nuc_list = "".join(nuc_list)
+            # Join the reversed complement list into a single string.
+            update_nuc_list = "".join(nuc_list)
 
-        # Return the reverse complement as a string.
-        return update_nuc_list
-    except FileNotFoundError:
-        print(f'File not found: {file_path}')
+            # Return the reverse complement as a string.
+            return update_nuc_list
+
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f'File not found: {file_path}') from e
     except IOError as e:
-        print(f'An error called while reading the file: {e}')
-
+        raise IOError(f'An error occurred while reading the file: {e}') from e
+    except ValueError as e:
+        raise ValueError(f'Error in DNA sequence: {e}') from e
 
 def nucleotide_loci(pattern, genome):
+    """
+    Find the starting positions of overlapping occurrences of a pattern in a genome.
+
+    Args:
+        pattern (str): The pattern to search for within the genome.
+        genome (str): The genome string in which to search for the pattern.
+
+    Returns:
+        list: A list of starting positions (indices) of pattern occurrences in the genome.
+    """
     matches = re.finditer(fr'(?=({pattern}))', genome)
     list_start = [match.start() for match in matches]
     return list_start
-    
+
+
+
+# Configure logging
+logging.basicConfig(filename='reverse_complement.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+if __name__ == '__main__':
+    file_path = 'dna_sequence.txt'  # Replace with the path to your DNA sequence file
+    try:
+        reverse_comp = reverse_complement(file_path)
+        print(f'Reverse Complement: {reverse_comp}')
+        logger.info('Reverse complement generated successfully.')
+    except Exception as e:
+        print(f'Error: {e}')
+        logger.error(f'Error: {e}')
+
+
+
+
+
 
 
 
