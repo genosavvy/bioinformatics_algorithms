@@ -2,6 +2,7 @@ import re
 import logging
 
 
+
 logging.basicConfig(
     filename= "count.log",
     level= logging.DEBUG,
@@ -68,6 +69,21 @@ def findclumps(dna_sequence,k,L,t):
     pattern = list(set(kmers))    
 
     return pattern
+
+def skew_array(genome):
+
+    out_list = [0]
+    def add_skew(a,b):
+        return a + b
+    for nuc in genome:
+        if nuc == "C":
+            out_list.append(add_skew(out_list[-1], -1))
+        elif nuc == "G":
+            out_list.append(add_skew(out_list[-1], 1))
+        else:
+            out_list.append(out_list[-1])
+
+    return out_list 
 
 
 

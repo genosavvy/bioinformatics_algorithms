@@ -56,6 +56,9 @@ def reverse_complement(file_path):
         raise ValueError(f'Error in DNA sequence: {e}') from e
 
 def nucleotide_loci(pattern, file_path):
+    """
+    This function find the 
+    """
 
     try:
         with open(file_path, "r") as f:

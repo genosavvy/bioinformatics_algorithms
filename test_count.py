@@ -1,5 +1,6 @@
 from count import *
 
+
 def test_patterncount():
     text = "GCGCG"
     pattern = "GCG"
@@ -33,6 +34,11 @@ def test_findclumps():
     k = 5
     L = 50
     t = 4
-    assert findclumps(text, k,L,t) == ['GAAGA', 'CGACA']
+    assert findclumps(text, k,L,t) == ['GAAGA', 'CGACA'] or findclumps(text, k,L,t) == ['CGACA', 'GAAGA']
+
+def test_skew_array():
+
+    genome = "CATGGGCATCGGCCATACGCC"
+    assert skew_array(genome=genome) == [0, -1, -1, -1, 0, 1, 2, 1, 1, 1, 0, 1, 2, 1, 0, 0, 0, 0, -1, 0, -1, -2]
 
     
